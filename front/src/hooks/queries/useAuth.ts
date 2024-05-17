@@ -1,8 +1,6 @@
 import {
-  UseQueryOptions,
   useMutation,
   useQuery,
-  QueryKey,
 } from '@tanstack/react-query';
 import {
   getAccessToken,
@@ -10,16 +8,18 @@ import {
   logout,
   postLogin,
   postSignup,
-} from '../../api/auth';
+} from '@/api/auth';
 import {
   UseMutationCustomOptions,
   UseQueryCustomOptions,
-} from '../../types/common';
-import {removeEncryptStorage, setEncryptStorage} from '../../utils';
-import axiosInstance from '../../api/axios';
-import {removeHeader, setHeader} from '../../utils/header';
+} from '@/types/common';
+import {removeEncryptStorage, setEncryptStorage} from '@/utils';
+import {removeHeader, setHeader} from '@/utils/header';
 import {useEffect} from 'react';
-import queryClient from '../../api/queryClient';
+
+import { numbers, queryKeys, storageKeys } from '@/constants';
+import queryClient from '@/api/queryClient';
+
 
 function useSignup(mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
@@ -32,16 +32,17 @@ function useLogin(mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
     mutationFn: postLogin,
     onSuccess: ({accessToken, refreshToken}) => {
-      setEncryptStorage('refreshToken', refreshToken);
+      setEncryptStorage(storageKeys.REFRESH_TOKEN, refreshToken);
       setHeader('Authorization', `Bearer ${accessToken}`);
     },
     // 로그인 후에 리프레시 훅을 실행해줘서
     // 자동 갱신이 로그인 했을때도 훅에서 설정한 옵션에 따라 돌도록 하기위해
     // queryClient.refetchQueries를 사용한다.
     onSettled: () => {
-      queryClient.refetchQueries({queryKey: ['auth', 'getAccessToken']});
+      console.log('로그인 useLogin쿼리 ');
+      queryClient.refetchQueries({queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN]});
       // 그 전에 있던 프로필 요청 무효화하기 위해
-      queryClient.invalidateQueries({queryKey: ['auth', 'getProfile']})
+      queryClient.invalidateQueries({queryKey: [queryKeys.AUTH, queryKeys.GET_PROFILE]})
     },
     ...mutationOptions,
   });
@@ -54,17 +55,17 @@ function useLogin(mutationOptions?: UseMutationCustomOptions) {
 // useQuery가 반환하는 값 중에 isSuccess, isError 상태가 있다. useEffect를 같이 사용해서 구현해보자
 function useGetRefreshToken() {
   const {data, isSuccess, isError} = useQuery({
-    queryKey: ['auth', 'getAccessToken'],
+    queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
     queryFn: getAccessToken,
-    staleTime: 100 * 60 * 30 - 1000 * 60 * 3,
-    refetchInterval: 100 * 60 * 30 - 1000 * 60 * 3,
+    staleTime: numbers.ACCESS_TOKEN_REFRESH_TIME,
+    refetchInterval: numbers.ACCESS_TOKEN_REFRESH_TIME,
     refetchOnReconnect: true,
     refetchIntervalInBackground: true,
   });
 
   useEffect(() => {
     if (isSuccess) {
-      setEncryptStorage('refreshToken', data.refreshToken);
+      setEncryptStorage(storageKeys.REFRESH_TOKEN, data.refreshToken);
       setHeader('Authorization', `Bearer ${data.accessToken}`);
     }
   }, [isSuccess]);
@@ -72,7 +73,7 @@ function useGetRefreshToken() {
   useEffect(() => {
     if (isError) {
       removeHeader('Authorization');
-      removeEncryptStorage('refreshToken');
+      removeEncryptStorage(storageKeys.REFRESH_TOKEN);
     }
   }, [isError]);
 
@@ -81,7 +82,7 @@ function useGetRefreshToken() {
 
 function useGetProfile(queryOptions?: UseQueryCustomOptions) {
   return useQuery({
-    queryKey: ['auth', 'getProfile'],
+    queryKey: [queryKeys.AUTH, queryKeys.GET_PROFILE],
     queryFn: getProfile,
     ...queryOptions,
   });
@@ -92,11 +93,11 @@ function useLogout(mutationOptions?: UseMutationCustomOptions) {
     mutationFn: logout,
     onSuccess: () => {
       removeHeader('Authorization');
-      removeEncryptStorage('refreshToken');
+      removeEncryptStorage(storageKeys.REFRESH_TOKEN);
     },
     onSettled: () => {
       // auth에 해당하는 쿼리들 무효화
-      queryClient.invalidateQueries({queryKey: ['auth']})
+      queryClient.invalidateQueries({queryKey: [queryKeys.AUTH]})
     }
   })
 }
