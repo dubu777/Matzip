@@ -14,6 +14,8 @@ export type MainDrawerParamList = {
 
 const Drawer = createDrawerNavigator();
 
+
+
 function MainDrawerNavigator() {
   return (
     <Drawer.Navigator
