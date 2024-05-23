@@ -1,4 +1,4 @@
-import React, {ForwardedRef, forwardRef, useRef} from 'react';
+import React, {ForwardedRef, ReactNode, forwardRef, useRef} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -15,13 +15,14 @@ interface InputFieldProps extends TextInputProps {
   disabled?: boolean;
   error?: string;
   touched?: boolean;
+  icon?: ReactNode;
 }
 
 const deviceHeight = Dimensions.get('screen').height;
 
 const InputField = forwardRef(
   (
-    {disabled = false, error, touched, ...props}: InputFieldProps,
+    {disabled = false, error, touched, icon=null, ...props}: InputFieldProps,
     ref?: ForwardedRef<TextInput>,
   ) => {
     const innerRef = useRef<TextInput | null>(null);
@@ -36,18 +37,22 @@ const InputField = forwardRef(
           style={[
             styles.container,
             disabled && styles.disabled,
+            props.multiline && styles.multiLine,
             touched && Boolean(error) && styles.inputError,
           ]}>
-          <TextInput
-            ref={ref ? mergeRefs(innerRef, ref) : innerRef} // inputField 에서 사용하고 있는 ref 와 받아오는 ref 둘다 사용하기 위해 
-            editable={!disabled}
-            placeholderTextColor={colors.GRAY_500}
-            style={[styles.input, disabled && styles.disabled]}
-            autoCapitalize="none" // 첫글자 대문자 끄기
-            spellCheck={false} // 스펠 체크 끄기
-            autoCorrect={false} // 자동 수정 끄기
-            {...props}
-          />
+          <View style={Boolean(icon) && styles.innerContainer}>
+            {icon}
+            <TextInput
+              ref={ref ? mergeRefs(innerRef, ref) : innerRef} // inputField 에서 사용하고 있는 ref 와 받아오는 ref 둘다 사용하기 위해
+              editable={!disabled}
+              placeholderTextColor={colors.GRAY_500}
+              style={[styles.input, disabled && styles.disabled]}
+              autoCapitalize="none" // 첫글자 대문자 끄기
+              spellCheck={false} // 스펠 체크 끄기
+              autoCorrect={false} // 자동 수정 끄기
+              {...props}
+            />
+          </View>
           {touched && Boolean(error) && (
             <Text style={styles.error}>{error}</Text>
           )}
@@ -81,6 +86,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     paddingTop: 5,
   },
+  innerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  multiLine: {
+    paddingBottom: deviceHeight > 700 ? 45 : 30,
+  }
 });
 
 export default InputField;
