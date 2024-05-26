@@ -1,6 +1,7 @@
 import AddPostHeaderRight from '@/components/AddPostHeaderRight';
 import CustomButton from '@/components/CustomButton';
 import InputField from '@/components/InputField';
+import MarkerSelector from '@/components/MarkerSelector';
 import {colors, mapNavigations} from '@/constants';
 import useMutateCreatePost from '@/hooks/queries/useMutateCreatePost';
 import useForm from '@/hooks/useForm';
@@ -34,6 +35,9 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
   const [score, setScore] = useState(5)
   const address = useGetAddress(location)
 
+  const handleSelectMarker = (name: MarkerColor) => {
+    setMarkerColor(name)
+  }
   const handleSubmit = () => {
     const body = {
       date: new Date(),
@@ -88,6 +92,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
             returnKeyType="next"
             multiline
           />
+          <MarkerSelector markerColor={markerColor} onPressMarker={handleSelectMarker}/>
         </View>
       </ScrollView>
     </SafeAreaView>
