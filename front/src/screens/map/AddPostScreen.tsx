@@ -145,8 +145,8 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
           />
           <ScoreInput score={score} onChangeScore={handleChangeScore} />
           <View style={styles.imagesViewer}>
-          <ImageInput onChange={imagePicker.handleChange} />
-          <PreviewImageList imageUris={imagePicker.imageUris} />
+            <ImageInput onChange={imagePicker.handleChange} />
+            <PreviewImageList imageUris={imagePicker.imageUris} />
           </View>
         </View>
       </ScrollView>
