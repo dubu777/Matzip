@@ -45,7 +45,11 @@ function PreviewImageList({
                 <Pressable
                   style={[styles.imageButton, styles.deleteButton]}
                   onPress={() => onDelete && onDelete(uri)}>
-                  <Ionicons name={'close'} size={16} color={colors.WHITE} />
+                  <Ionicons
+                    name={'close'} 
+                    size={16} 
+                    color={colors.WHITE} 
+                  />
                 </Pressable>
 
                 {index > 0 && (

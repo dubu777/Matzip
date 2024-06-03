@@ -20,11 +20,14 @@ function useImagePicker({initialImages = []}: UseImagePickerProps) {
       Alert.alert('이미지 개수 초과', '추가 가능한 이미지는 최대 5개입니다.');
       return;
     }
-
+    console.log(uris, 'uri');
+    // {uri: uri} 로 만들어서 기존 imageUris에 확산추가
     setImageUris(prev => [...prev, ...uris.map(uri => ({uri}))]);
   };
 
   const deleteImageUri = (uri: string) => {
+    console.log(imageUris, 'imageUris'); 
+    // 선택한 사진 uri가 아닌 새로운 newImageUris를 setImageUris로 덮어씌움
     const newImageUris = imageUris.filter(image => image.uri !== uri);
     setImageUris(newImageUris);
   };
@@ -49,7 +52,10 @@ function useImagePicker({initialImages = []}: UseImagePickerProps) {
         const formData = getFormDataImages('images', images);
 
         uploadImages.mutate(formData, {
-          onSuccess: data => addImageUris(data),
+          onSuccess: data => {
+            addImageUris(data)
+            console.log(data, 'data');
+          },
         });
       })
       .catch(error => {
