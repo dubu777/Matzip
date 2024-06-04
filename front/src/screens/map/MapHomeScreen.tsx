@@ -21,6 +21,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import mapStyle from '@/style/mapStyle';
 import CustomMarker from '@/components/CustomMarker';
 import { useGetMarkers } from '@/hooks/queries/useGetMarkers';
+import useModal from '@/hooks/useModal';
+import MarkerModal from '@/components/MarkerModal';
+import Config from 'react-native-config';
+
+console.log(Config.GOOGLE_API_KEY, 'config');
+console.log(Config.TEST, 'config test');
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,
@@ -37,12 +43,28 @@ function MapHomeScreen() {
   const mapRef = useRef<MapView | null>(null);
   const {userLocation, isUserLocationError} = useUserLocation();
   const {data: markers=[]} = useGetMarkers();
-  usePermission('LOCATION');
   const [selectLocation, setSelectLocation] = useState<LatLng | null>();
+  const [markerId, setMarkerId] = useState<number | null>(null);
+  const markerModal = useModal();
+  usePermission('LOCATION');
+
+  const moveMapView = (coordinate:LatLng) => {
+    mapRef.current?.animateToRegion({
+      ...coordinate,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    });
+  }
+
   const handleLongPressMapView = ({nativeEvent}: LongPressEvent) => {
     setSelectLocation(nativeEvent.coordinate);
   };
 
+  const handlePressMarker = (id: number, coordinate:LatLng) => {
+    moveMapView(coordinate)
+    setMarkerId(id)
+    markerModal.show();
+  }
   const handlePressAddPost = () => {
     if(!selectLocation) {
       return Alert.alert(
@@ -64,12 +86,7 @@ function MapHomeScreen() {
     }
 
     // ref를 이용해서 해당 위치로 이동
-    mapRef.current?.animateToRegion({
-      latitude: userLocation.latitude,
-      longitude: userLocation.longitude,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    });
+    moveMapView(userLocation)
   };
 
   return (
@@ -88,12 +105,13 @@ function MapHomeScreen() {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}>
-        {markers.map(({id, color, score, ...coordintae}) => (
+        {markers.map(({id, color, score, ...coordinate}) => (
           <CustomMarker
             key={id}
             color={color}
             score={score}
-            coordinate={coordintae}
+            coordinate={coordinate}
+            onPress={() => handlePressMarker(id, coordinate)}
           />
         ))}
         {selectLocation && (
@@ -115,6 +133,7 @@ function MapHomeScreen() {
           <MaterialIcons name="my-location" color={colors.WHITE} size={25} />
         </Pressable>
       </View>
+      <MarkerModal markerId={markerId} isVisible={markerModal.isVisible} hide={markerModal.hide}/>
     </>
   );
 }
