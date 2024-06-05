@@ -19,11 +19,11 @@ import usePermission from '@/hooks/usePermission';
 import Ioniccons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import mapStyle from '@/style/mapStyle';
-import CustomMarker from '@/components/CustomMarker';
 import { useGetMarkers } from '@/hooks/queries/useGetMarkers';
 import useModal from '@/hooks/useModal';
-import MarkerModal from '@/components/MarkerModal';
 import Config from 'react-native-config';
+import CustomMarker from '@/components/common/CustomMarker';
+import MarkerModal from '@/components/map/MarkerModal';
 
 console.log(Config.GOOGLE_API_KEY, 'config');
 console.log(Config.TEST, 'config test');

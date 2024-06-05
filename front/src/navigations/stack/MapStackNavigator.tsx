@@ -1,6 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import {StyleSheet} from 'react-native';
 import {mapNavigations} from '@/constants';
 import MapHomeScreen from '@/screens/map/MapHomeScreen';
 import AddPostScreen from '@/screens/map/AddPostScreen';
