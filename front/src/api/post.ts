@@ -59,5 +59,19 @@ const updateFavoritePost = async(id: number): Promise<number> => {
   return data;
 }
 
-export {createPost, getPost, getPosts, deletePost, updatePost, updateFavoritePost, getFavoritePosts};
-export type {ResponsePost, RequestCreatePost, ResponseSinglePost, RequestUpdatePost};
+type CalendarPost = {
+  id: number;
+  title: string;
+  adress: string;
+}
+
+type ResponseCalendatPost = Record<number, CalendarPost>
+
+const getCalendatPost = async(year: number, month: number): Promise<ResponseCalendatPost> => {
+  const {data} = await axiosInstance.get(`/posts?year=${year}&month${month}`);
+
+  return data
+}
+
+export {createPost, getPost, getPosts, deletePost, updatePost, updateFavoritePost, getFavoritePosts, getCalendatPost};
+export type {ResponsePost, RequestCreatePost, ResponseSinglePost, RequestUpdatePost, ResponseCalendatPost};
