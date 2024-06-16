@@ -102,7 +102,9 @@ function PostForm({location, isEdit = false}: PostFormProps) {
     }
     createPost.mutate(
       {address, ...location, ...body},
-      {onSuccess: () => navigation.goBack()},
+      {
+        onSuccess: () => navigation.goBack(),
+      },
     );
   };
 

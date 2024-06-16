@@ -13,7 +13,6 @@ const getPosts = async (page = 1): Promise<ResponsePost[]> => {
 
 const createPost = async (body: RequestCreatePost): Promise<ResponsePost> => {
   const {data} = await axiosInstance.post('/posts', body);
-
   return data;
 };
 
@@ -47,31 +46,48 @@ const updatePost = async ({
   return data;
 };
 
-const getFavoritePosts = async(page = 1): Promise<ResponsePost[]> => {
-  const {data} = await axiosInstance.get(`/favorites/my?page=${page}`)
+const getFavoritePosts = async (page = 1): Promise<ResponsePost[]> => {
+  const {data} = await axiosInstance.get(`/favorites/my?page=${page}`);
+  return data;
+};
+
+const updateFavoritePost = async (id: number): Promise<number> => {
+  const {data} = await axiosInstance.post(`/favorites/${id}`);
 
   return data;
-}
-
-const updateFavoritePost = async(id: number): Promise<number> => {
-  const {data} = await axiosInstance.post(`/favorites/${id}`)
-
-  return data;
-}
+};
 
 type CalendarPost = {
   id: number;
   title: string;
-  adress: string;
-}
+  address: string;
+};
 
-type ResponseCalendatPost = Record<number, CalendarPost>
+type ResponseCalendarPost = Record<number, CalendarPost[]>;
 
-const getCalendatPost = async(year: number, month: number): Promise<ResponseCalendatPost> => {
-  const {data} = await axiosInstance.get(`/posts?year=${year}&month${month}`);
+const getCalendatPosts = async (
+  year: number,
+  month: number,
+): Promise<ResponseCalendarPost> => {
+  const {data} = await axiosInstance.get(`/posts?year=${year}&month=${month}`);
+  return data;
+};
 
-  return data
-}
-
-export {createPost, getPost, getPosts, deletePost, updatePost, updateFavoritePost, getFavoritePosts, getCalendatPost};
-export type {ResponsePost, RequestCreatePost, ResponseSinglePost, RequestUpdatePost, ResponseCalendatPost};
+export {
+  createPost,
+  getPost,
+  getPosts,
+  deletePost,
+  updatePost,
+  updateFavoritePost,
+  getFavoritePosts,
+  getCalendatPosts,
+};
+export type {
+  ResponsePost,
+  RequestCreatePost,
+  ResponseSinglePost,
+  RequestUpdatePost,
+  ResponseCalendarPost,
+  CalendarPost,
+};

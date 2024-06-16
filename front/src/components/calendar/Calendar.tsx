@@ -3,25 +3,35 @@ import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import {MonthYear, isSameAsCurrentDate} from '@/utils';
+import {MonthYear, getNewMonthYear, isSameAsCurrentDate} from '@/utils';
 import {colors} from '@/constants';
 import DayOfWeeks from './DayOfWeeks';
 import DateBox from './DateBox';
+import {ResponseCalendarPost} from '@/api';
+import YearSelector from './YearSelector';
+import useModal from '@/hooks/useModal';
 
-interface CalenderProps {
+interface CalenderProps<T> {
   monthYear: MonthYear;
+  selectedDate: number;
+  schedules: Record<number, T[]>;
   onChangeMonth: (increment: number) => void;
   onPressDate: (date: number) => void;
-  selectedDate: number;
 }
 
-function Calender({
+function Calender<T>({
   monthYear,
   onChangeMonth,
   onPressDate,
   selectedDate,
-}: CalenderProps) {
+  schedules,
+}: CalenderProps<T>) {
   const {month, year, lastDate, firstDOW} = monthYear;
+  const yearSelector = useModal();
+  const handleChangeYear = (selectYear: number) => {
+    onChangeMonth((selectYear - year) * 12);
+    yearSelector.hide();
+  };
 
   return (
     <>
@@ -31,7 +41,9 @@ function Calender({
           onPress={() => onChangeMonth(-1)}>
           <Ionicons name="arrow-back" size={25} color={colors.BLACK} />
         </Pressable>
-        <Pressable style={styles.monthYearContainer}>
+        <Pressable
+          style={styles.monthYearContainer}
+          onPress={yearSelector.show}>
           <Text>
             {year}년 {month}월
           </Text>
@@ -58,6 +70,7 @@ function Calender({
             <DateBox
               date={item.date}
               isToday={isSameAsCurrentDate(year, month, item.date)}
+              hasSchedule={Boolean(schedules[item.date])}
               selectedDate={selectedDate}
               onPressDate={onPressDate}
             />
@@ -66,6 +79,12 @@ function Calender({
           numColumns={7}
         />
       </View>
+      <YearSelector
+        isVisible={yearSelector.isVisible}
+        currentYear={year}
+        onChangeYear={handleChangeYear}
+        hide={yearSelector.hide}
+      />
     </>
   );
 }

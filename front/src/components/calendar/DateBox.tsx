@@ -1,17 +1,25 @@
-import {colors} from '@/constants';
 import React from 'react';
 import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
 
+import {colors} from '@/constants';
+
 interface DateBoxProps {
   date: number;
+  isToday: boolean;
+  hasSchedule: boolean;
   selectedDate: number;
   onPressDate: (date: number) => void;
-  isToday: boolean;
 }
 
 const deviceWidth = Dimensions.get('window').width;
 
-function DateBox({date, selectedDate, onPressDate, isToday}: DateBoxProps) {
+function DateBox({
+  date,
+  isToday,
+  hasSchedule,
+  selectedDate,
+  onPressDate,
+}: DateBoxProps) {
   return (
     <Pressable style={styles.container} onPress={() => onPressDate(date)}>
       {date > 0 && (
@@ -19,19 +27,20 @@ function DateBox({date, selectedDate, onPressDate, isToday}: DateBoxProps) {
           <View
             style={[
               styles.dateContainer,
-              date === selectedDate && styles.selectedContainer,
-              date === selectedDate && isToday && styles.selectedTodayContainer
+              selectedDate === date && styles.selectedContainer,
+              selectedDate === date && isToday && styles.selectedTodayContainer,
             ]}>
             <Text
               style={[
                 styles.dateText,
                 isToday && styles.todayText,
-                date === selectedDate && styles.selectedDateText,
-                date === selectedDate && isToday && styles.selectedTodayText,
+                selectedDate === date && styles.selectedDateText,
+                selectedDate === date && isToday && styles.selectedTodayText,
               ]}>
               {date}
             </Text>
           </View>
+          {hasSchedule && <View style={styles.scheduleIndicator} />}
         </>
       )}
     </Pressable>
