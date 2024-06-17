@@ -1,11 +1,13 @@
-import React, { useRef } from 'react';
+import React, {useRef} from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import useForm from '@/hooks/useForm';
 import {validateSignup} from '@/utils';
-import { TextInput } from 'react-native-gesture-handler';
+import {TextInput} from 'react-native-gesture-handler';
 import useAuth from '@/hooks/queries/useAuth';
 import InputField from '@/components/common/InputField';
 import CustomButton from '@/components/common/CustomButton';
+import Toast from 'react-native-toast-message';
+import { errorMessages } from '@/constants';
 
 function SignupScreen() {
   const passwordRef = useRef<TextInput | null>(null);
@@ -15,15 +17,25 @@ function SignupScreen() {
     initialValue: {email: '', password: '', passwordConfirm: ''},
     validate: validateSignup,
   });
-  
+
   const handleSubmit = () => {
-    const {email, password} = signup.values
-    signupMutation.mutate(signup.values, {
-      onSuccess: () => loginMutation.mutate({email, password}),
-      // 쿼리마다 옵션을 받을 수 있게  ...mutationOptions 와 같이 해놔서 onSuccess를 사용할 수 있다.
-    })
-    
-  }
+    const {email, password} = signup.values;
+    signupMutation.mutate(
+      {email, password},
+      {
+        onSuccess: () => loginMutation.mutate({email, password}),
+        // 쿼리마다 옵션을 받을 수 있게  ...mutationOptions 와 같이 해놔서 onSuccess를 사용할 수 있다.
+        onError: error => {
+          Toast.show({
+            type: 'error',
+            text1: error.response?.data.message || errorMessages.UNEXPECT_ERROR,
+            position: 'bottom',
+            visibilityTime: 2,
+          });
+        },
+      },
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -34,7 +46,7 @@ function SignupScreen() {
           error={signup.errors.email}
           touched={signup.touched.email}
           inputMode="email"
-          returnKeyType='next' // 키패드에서 제출버튼이 다음버튼으로 됨
+          returnKeyType="next" // 키패드에서 제출버튼이 다음버튼으로 됨
           blurOnSubmit={false} // 제출해도 키패트가 닫히지 않음
           onSubmitEditing={() => passwordRef.current?.focus()} // 제출 후 ref를 이용해서 password에 포커스되게 힘
           {...signup.getTextInputProps('email')}
@@ -42,11 +54,11 @@ function SignupScreen() {
         <InputField
           ref={passwordRef}
           placeholder="비밀번호"
-          textContentType='oneTimeCode' // strong password 설정 안뜨게
+          textContentType="oneTimeCode" // strong password 설정 안뜨게
           error={signup.errors.password}
           touched={signup.touched.password}
           secureTextEntry
-          returnKeyType='next'
+          returnKeyType="next"
           blurOnSubmit={false}
           onSubmitEditing={() => passwordConfirmRef.current?.focus()}
           {...signup.getTextInputProps('password')}
@@ -61,7 +73,7 @@ function SignupScreen() {
           {...signup.getTextInputProps('passwordConfirm')}
         />
       </View>
-      <CustomButton label="회원가입" onPress={handleSubmit}/>
+      <CustomButton label="회원가입" onPress={handleSubmit} />
     </SafeAreaView>
   );
 }

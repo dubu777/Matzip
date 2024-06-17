@@ -20,7 +20,6 @@ function CalendarHomeScreen() {
     return <></>;
   }
 
-  console.log(posts, 'posts');
 
   const handlePressDate = (date: number) => {
     setSelectedDate(date);
