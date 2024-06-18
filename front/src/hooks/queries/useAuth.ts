@@ -1,11 +1,14 @@
 import {
+  MutationFunction,
   useMutation,
   useQuery,
 } from '@tanstack/react-query';
 import {
   ResponseProfile,
+  ResponseToken,
   getAccessToken,
   getProfile,
+  kakaoLogin,
   logout,
   postLogin,
   postSignup,
@@ -29,9 +32,11 @@ function useSignup(mutationOptions?: UseMutationCustomOptions) {
   });
 }
 
-function useLogin(mutationOptions?: UseMutationCustomOptions) {
+
+// 카카오 로그인, 애플로그인에서도 사용할 수 있게 제네릭 이용해서 수정
+function useLogin<T>( loginAPI: MutationFunction<ResponseToken, T>, mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
-    mutationFn: postLogin,
+    mutationFn: loginAPI,
     onSuccess: ({accessToken, refreshToken}) => {
       setEncryptStorage(storageKeys.REFRESH_TOKEN, refreshToken);
       setHeader('Authorization', `Bearer ${accessToken}`);
@@ -48,6 +53,15 @@ function useLogin(mutationOptions?: UseMutationCustomOptions) {
     ...mutationOptions,
   });
 }
+
+function useEmailLogin(mutationOptions?: UseMutationCustomOptions) {
+  return useLogin(postLogin, mutationOptions);
+}
+
+function useKakaoLogin(mutationOptions?: UseMutationCustomOptions) {
+  return useLogin(kakaoLogin, mutationOptions);
+}
+
 
 // 액세스 토큰을 받아와서 평생쓰는게 아니고 보안상 짧게 유효시간을 가지고 사용하고 따로 저장소에 저장하지도 않는다.
 // 그래서 useGetRefreshToken에서 신선하지 않은 데이터로 취급되는 시간을 지정해줄수 있다. 여기에선 27분으로 설정
@@ -113,7 +127,8 @@ function useAuth() {
     // 리프레시 토큰이 성공했다면 프로필도 가져온다.
   });
   const isLogin = getProfileQuery.isSuccess; // 프로필 쿼리가 성공했다면 로그인도 성공했다고 볼수있으니까
-  const loginMutation = useLogin();
+  const loginMutation = useEmailLogin();
+  const kakaoLoginMutation = useKakaoLogin();
   const logoutMutation = useLogout();
   return {
     signupMutation,
@@ -122,6 +137,7 @@ function useAuth() {
     isLogin,
     loginMutation,
     logoutMutation,
+    kakaoLoginMutation,
   };
 }
 

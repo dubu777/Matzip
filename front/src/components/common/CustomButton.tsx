@@ -1,5 +1,5 @@
 import { colors } from '@/constants';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -7,6 +7,9 @@ import {
   PressableProps,
   Dimensions,
   View,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
 } from 'react-native';
 
 // PressableProps 를 받아와서 확장시켜준다.
@@ -15,6 +18,9 @@ interface CustomButtonProps extends PressableProps {
   variant?: 'filled' | 'outlined';
   size?: 'large' | 'medium';
   inVailed?: boolean;
+  style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
+  icon?: ReactNode;
 }
 
 const deviceHeight = Dimensions.get('screen').height;
@@ -24,6 +30,9 @@ function CustomButton({
   variant = 'filled',
   size = 'large',
   inVailed = false,
+  style = null,
+  textStyle = null,
+  icon = null,
   ...props
 }: // ...props 로 PressableProps를 전부 받아준다.
 CustomButtonProps) {
@@ -34,11 +43,13 @@ CustomButtonProps) {
         styles.container,
         pressed ? styles[`${variant}Pressed`] : styles[variant],
         inVailed && styles.inVailed,
+        style,
       ]}
       {...props} // props를 넣어주면 PressableProps에 있는 props 들을 일일이 추가하지 않고 한번에 넘겨줄수 있다.
     >
       <View style={styles[size]}>
-      <Text style={[styles.text, styles[`${variant}Text`]]}>{label}</Text>
+        {icon}
+      <Text style={[styles.text, styles[`${variant}Text`], textStyle]}>{label}</Text>
       </View>
     </Pressable>
   );
@@ -74,6 +85,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+    gap: 5,
   },
   medium: {
     width: '50%',
@@ -81,6 +93,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+    gap: 5,
   },
   filledText: {
     color: colors.WHITE,
