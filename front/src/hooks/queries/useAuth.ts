@@ -44,6 +44,7 @@ function useLogin<T>( loginAPI: MutationFunction<ResponseToken, T>, mutationOpti
     // 로그인 후에 리프레시 훅을 실행해줘서
     // 자동 갱신이 로그인 했을때도 훅에서 설정한 옵션에 따라 돌도록 하기위해
     // queryClient.refetchQueries를 사용한다.
+    // onSettled는 요청이 성공하든 실패하든 항상 실행됨
     onSettled: () => {
       console.log('로그인 useLogin쿼리 ');
       queryClient.refetchQueries({queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN]});
@@ -109,11 +110,10 @@ function useLogout(mutationOptions?: UseMutationCustomOptions) {
     onSuccess: () => {
       removeHeader('Authorization');
       removeEncryptStorage(storageKeys.REFRESH_TOKEN);
-    },
-    onSettled: () => {
       // auth에 해당하는 쿼리들 무효화
-      queryClient.invalidateQueries({queryKey: [queryKeys.AUTH]})
-    }
+      queryClient.resetQueries({queryKey: [queryKeys.AUTH]})
+    },
+    ...mutationOptions,
   })
 }
 

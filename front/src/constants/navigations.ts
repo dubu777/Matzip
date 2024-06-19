@@ -2,6 +2,7 @@ const mainNavigations = {
   HOME: 'Home',
   FEED: 'Feed',
   CALENDAR: 'Calendar',
+  SETTING: 'Setting',
 } as const;
 
 const authNavigations = {
@@ -30,4 +31,9 @@ const feedTabNavigations = {
   FEED_SEARCH: 'FeedSearch',
 } as const;
 
-export {mainNavigations, authNavigations, mapNavigations, feedNavigations, feedTabNavigations};
+const settingNavigations = {
+  SETTING_HOME: 'SettingHome',
+  EDIT_PROFILE: 'EditProfile',
+} as const;
+
+export {mainNavigations, authNavigations, mapNavigations, feedNavigations, feedTabNavigations, settingNavigations};
