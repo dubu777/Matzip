@@ -9,14 +9,20 @@ import Toast from 'react-native-toast-message';
 
 interface UseImagePickerProps {
   initialImages: ImageUri[];
+  mode?: 'multiple' | 'single';
+  onSettled?: () => void;
 }
 
-function useImagePicker({initialImages = []}: UseImagePickerProps) {
+function useImagePicker({
+  initialImages = [],
+  mode = 'multiple',
+  onSettled
+}: UseImagePickerProps) {
   const [imageUris, setImageUris] = useState(initialImages);
   const uploadImages = useMutateImages();
 
   const addImageUris = (uris: string[]) => {
-    // 기존 이미지 개수와 지금 추가할 이미지 개수가 5개 초과하면 
+    // 기존 이미지 개수와 지금 추가할 이미지 개수가 5개 초과하면
     if (imageUris.length + uris.length > 5) {
       Alert.alert('이미지 개수 초과', '추가 가능한 이미지는 최대 5개입니다.');
       return;
@@ -26,8 +32,18 @@ function useImagePicker({initialImages = []}: UseImagePickerProps) {
     setImageUris(prev => [...prev, ...uris.map(uri => ({uri}))]);
   };
 
+  // 프로필처럼 이미지 1개만 선택 가능한 경우
+  const replaceImageUri = (uris: string[]) => {
+    if(uris.length > 1) {
+      Alert.alert('이미지 개수 초과', '추가 가능한 이미지는 최대 1개입니다.');
+      return
+    }
+
+    setImageUris([...uris.map(uri => ({uri}))])
+  }
+
   const deleteImageUri = (uri: string) => {
-    console.log(imageUris, 'imageUris'); 
+    console.log(imageUris, 'imageUris');
     // 선택한 사진 uri가 아닌 새로운 newImageUris를 setImageUris로 덮어씌움
     const newImageUris = imageUris.filter(image => image.uri !== uri);
     setImageUris(newImageUris);
@@ -45,7 +61,7 @@ function useImagePicker({initialImages = []}: UseImagePickerProps) {
       mediaType: 'photo',
       multiple: true,
       includeBase64: true,
-      maxFiles: 5,
+      maxFiles: mode === 'multiple' ? 5 : 1,
       cropperChooseText: '완료',
       cropperCancelText: '취소',
     })
@@ -53,10 +69,8 @@ function useImagePicker({initialImages = []}: UseImagePickerProps) {
         const formData = getFormDataImages('images', images);
 
         uploadImages.mutate(formData, {
-          onSuccess: data => {
-            addImageUris(data)
-            console.log(data, 'data');
-          },
+          onSuccess: data => mode === 'multiple' ? addImageUris(data) : replaceImageUri(data),
+          onSettled: () => onSettled && onSettled()
         });
       })
       .catch(error => {
@@ -67,7 +81,7 @@ function useImagePicker({initialImages = []}: UseImagePickerProps) {
             text1: '갤러리를 열 수 없어요.',
             text2: '권한을 허용했는지 확인해주세요.',
             position: 'bottom',
-          })
+          });
         }
       });
   };
@@ -78,6 +92,7 @@ function useImagePicker({initialImages = []}: UseImagePickerProps) {
     delete: deleteImageUri,
     changeOrder: changeImageUrisOrder,
     isUploading: uploadImages.isPending,
+    replaceImageUri,
   };
 }
 

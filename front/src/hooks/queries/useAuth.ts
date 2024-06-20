@@ -6,6 +6,7 @@ import {
 import {
   ResponseProfile,
   ResponseToken,
+  editProfile,
   getAccessToken,
   getProfile,
   kakaoLogin,
@@ -104,6 +105,19 @@ function useGetProfile(queryOptions?: UseQueryCustomOptions<ResponseProfile>) {
   });
 }
 
+function useUpdateProfile(mutationOptions?: UseMutationCustomOptions) {
+  return useMutation({
+    mutationFn: editProfile,
+    onSuccess: newProfile => {
+      queryClient.setQueryData(
+        [queryKeys.AUTH, queryKeys.GET_PROFILE],
+        newProfile
+      )
+    },
+    ...mutationOptions,
+  })
+}
+
 function useLogout(mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
     mutationFn: logout,
@@ -130,6 +144,7 @@ function useAuth() {
   const loginMutation = useEmailLogin();
   const kakaoLoginMutation = useKakaoLogin();
   const logoutMutation = useLogout();
+  const profileMutation = useUpdateProfile();
   return {
     signupMutation,
     refreshTokenQuery,
@@ -138,6 +153,7 @@ function useAuth() {
     loginMutation,
     logoutMutation,
     kakaoLoginMutation,
+    profileMutation,
   };
 }
 
