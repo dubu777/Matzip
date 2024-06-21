@@ -22,6 +22,7 @@ import {
   feedNavigations,
   mainNavigations,
   mapNavigations,
+  settingNavigations,
 } from '@/constants';
 import {getDateLocaleFormat} from '@/utils';
 import PreviewImageList from '@/components/common/PreviewImageList';
@@ -36,6 +37,7 @@ import FeedDetailOption from '@/components/feed/FeedDetailOption';
 import useDetailStore from '@/store/useDetailPostStore';
 import useMutateUpdatePost from '@/hooks/queries/useMutateUpdatePost';
 import useMutateFavoritePost from '@/hooks/queries/useMutateFavoritePost';
+import useAuth from '@/hooks/queries/useAuth';
 
 type FeedDetailScreenProps = CompositeScreenProps<
   StackScreenProps<FeedStackParamList, typeof feedNavigations.FEED_DETAIL>,
@@ -45,6 +47,8 @@ type FeedDetailScreenProps = CompositeScreenProps<
 function FeedDetailScreen({route, navigation}: FeedDetailScreenProps) {
   const {id} = route.params;
   const {data: post, isPending, isError} = useGetPost(id);
+  const {getProfileQuery} = useAuth();
+  const {categories} = getProfileQuery.data || {}
   // 노치에 가려지거나 간섭되는 부분의 길이를 계산해서 알려줌,
   const insets = useSafeAreaInsets();
   const {setMoveLocation} = useLocationStore();
@@ -72,6 +76,13 @@ function FeedDetailScreen({route, navigation}: FeedDetailScreenProps) {
     favoriteMutation.mutate(post.id)
   };
 
+  const handlePressCategory = () => {
+    navigation.navigate(
+      mainNavigations.SETTING, {
+        screen: settingNavigations.EDIT_CATEGORY,
+        initial: false,
+      }
+  )}
   return (
     <>
       <ScrollView
@@ -150,6 +161,16 @@ function FeedDetailScreen({route, navigation}: FeedDetailScreenProps) {
                     {backgroundColor: colorHex[post.color]},
                   ]}
                 />
+              </View>
+              <View style={styles.infoColumn}>
+                <Text style={styles.infoColumnKeyText}>카테고리</Text>
+                  {categories?.[post.color] ? (
+                    <Text>{categories?.[post.color]}</Text>
+                  ) : (
+                    <Pressable style={styles.emptyCategoryContainer} onPress={handlePressCategory}>
+                      <Text style={styles.infoColumnValueText}>미설정</Text>
+                    </Pressable>
+                  )}
               </View>
             </View>
           </View>

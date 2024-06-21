@@ -7,7 +7,7 @@ import {
   DrawerItemList,
   DrawerNavigationProp,
 } from '@react-navigation/drawer';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Image, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -31,12 +31,24 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
           <Pressable style={styles.userImageContainer}>
             {imageUri === null && kakaoImageUri === null && (
               <Image
-                source={require('@/assets/user-default.png')}
+                source={{
+                  uri: `${
+                    Platform.OS === 'ios'
+                      ? 'http://localhost:3030/'
+                      : 'http://10.0.2.2:3030/'
+                  }${imageUri}`,
+                }}
                 style={styles.userImage}
               />
             )}
             {imageUri === null && !!kakaoImageUri && (
-              <Image source={{uri: kakaoImageUri}} style={styles.userImage} />
+              <Image source={{
+                uri: `${
+                  Platform.OS === 'ios'
+                    ? 'http://localhost:3030/'
+                    : 'http://10.0.2.2:3030/'
+                }${kakaoImageUri}`,
+              }} style={styles.userImage} />
             )}
             {imageUri !== null && (
               <Image source={{uri: imageUri}} style={styles.userImage} />

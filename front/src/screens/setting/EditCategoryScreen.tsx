@@ -1,13 +1,19 @@
 import InputField from '@/components/common/InputField';
-import {colorHex, colors} from '@/constants';
+import EditCategoryHeaderRight from '@/components/setting/EditCategoryHeaderRight';
+import {colorHex, colors, errorMessages} from '@/constants';
 import useAuth from '@/hooks/queries/useAuth';
-import { MarkerColor } from '@/types';
-import React from 'react';
-import {Text} from 'react-native';
+import useForm from '@/hooks/useForm';
+import { SettingStackParamList } from '@/navigations/stack/SettingStackNavigator';
+import {MarkerColor} from '@/types';
+import {validateCategory} from '@/utils';
+import { StackScreenProps } from '@react-navigation/stack';
+import React, { useEffect, useRef } from 'react';
+import {Text, TextInput} from 'react-native';
 import {ScrollView} from 'react-native';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
+import Toast from 'react-native-toast-message';
 
-interface EditCategoryScreenProps {}
+type EditCategoryScreenProps = StackScreenProps<SettingStackParamList>
 
 const categoryList: MarkerColor[] = [
   'RED',
@@ -25,10 +31,44 @@ const categoryPlaceholderList = [
   'ex) 여행',
 ];
 
-
-function EditCategoryScreen({}: EditCategoryScreenProps) {
-  const {getProfileQuery} = useAuth();
+function EditCategoryScreen({navigation}: EditCategoryScreenProps) {
+  const refArray = useRef<(TextInput | null)[]>([])
+  const {getProfileQuery, categoryMutation} = useAuth();
   const {categories} = getProfileQuery.data || {};
+  const category = useForm({
+    initialValue: {
+      RED: categories?.RED ?? '',
+      YELLOW: categories?.YELLOW ?? '',
+      GREEN: categories?.GREEN ?? '',
+      BLUE: categories?.BLUE ?? '',
+      PURPLE: categories?.PURPLE ?? '',
+    },
+    validate: validateCategory,
+  });
+  const handleSubmit = () => {
+    categoryMutation.mutate(category.values, {
+      onSuccess: () => {
+        Toast.show({
+          type: 'success',
+          text1: '저장되었습니다.',
+          position: 'bottom',
+        })
+      },
+      onError: error => {
+        Toast.show({
+          type: 'error',
+          text1: error.response?.data.message || errorMessages.UNEXPECT_ERROR,
+          position: 'bottom',
+        })
+      },
+    })
+  }
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => EditCategoryHeaderRight(handleSubmit)
+    })
+  },[])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -50,7 +90,21 @@ function EditCategoryScreen({}: EditCategoryScreenProps) {
                 style={[styles.category, {backgroundColor: colorHex[color]}]}
               />
               <View style={styles.inputContainer}>
-                <InputField />
+                <InputField
+                  {...category.getTextInputProps(color)}
+                  error={category.errors[color]}
+                  touched={category.touched[color]}
+                  placeholder={categoryPlaceholderList[i]}
+                  ref={el => (refArray.current[i] = el)}
+                  autoFocus={color === 'RED'}
+                  maxLength={10}
+                  returnKeyType='next'
+                  blurOnSubmit={false}
+                  // 입력완료하면 다음 카테고리로 넘어가게
+                  onSubmitEditing={() => {
+                    refArray.current[i+1]?.focus();
+                  }}
+                />
               </View>
             </View>
           ))}
