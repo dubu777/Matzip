@@ -27,6 +27,8 @@ import MarkerModal from '@/components/map/MarkerModal';
 import useMoveMapView from '@/hooks/useMoveMapView';
 import Toast from 'react-native-toast-message';
 import useLocationStore from '@/store/useLocationStore';
+import useThemeStorage from '@/hooks/useThemeStorage';
+import { ThemeMode } from '@/types';
 
 console.log(Config.GOOGLE_API_KEY, 'config');
 console.log(Config.TEST, 'config test');
@@ -41,6 +43,8 @@ type Navigation = CompositeNavigationProp<
 // 2. 그 위치로 이동
 
 function MapHomeScreen() {
+  const {theme} = useThemeStorage();
+  const styles = styling(theme);
   const inset = useSafeAreaInsets(); // 아이폰은 헤더가 없어서 노치를 계산
   const navigation = useNavigation<Navigation>();
   const {selectLocation, setSelectLocation} = useLocationStore();
@@ -128,17 +132,17 @@ function MapHomeScreen() {
       <Pressable
         style={[styles.drawerButton, {top: inset.top || 20}]}
         onPress={() => navigation.openDrawer()}>
-        <Ioniccons name="menu" color={colors.WHITE} size={25} />
+        <Ioniccons name="menu" color={colors[theme].WHITE} size={25} />
       </Pressable>
       <View style={styles.buttonList}>
         <Pressable style={styles.mapButton} onPress={handlePressAddPost}>
-          <MaterialIcons name="add" color={colors.WHITE} size={25} />
+          <MaterialIcons name="add" color={colors[theme].WHITE} size={25} />
         </Pressable>
         <Pressable style={styles.mapButton} onPress={handlePressSearch}>
-          <Ioniccons name="search" color={colors.WHITE} size={25} />
+          <Ioniccons name="search" color={colors[theme].WHITE} size={25} />
         </Pressable>
         <Pressable style={styles.mapButton} onPress={handlePressUserLocation}>
-          <MaterialIcons name="my-location" color={colors.WHITE} size={25} />
+          <MaterialIcons name="my-location" color={colors[theme].WHITE} size={25} />
         </Pressable>
       </View>
       <MarkerModal
@@ -150,7 +154,7 @@ function MapHomeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -159,10 +163,10 @@ const styles = StyleSheet.create({
     left: 0,
     paddingVertical: 10,
     paddingHorizontal: 12,
-    backgroundColor: colors.PINK_700,
+    backgroundColor: colors[theme].PINK_700,
     borderTopRightRadius: 50,
     borderBottomRightRadius: 50,
-    shadowColor: colors.BLACK,
+    shadowColor: colors[theme].BLACK,
     shadowOffset: {width: 1, height: 1},
     shadowOpacity: 0.5,
     elevation: 4,
@@ -173,14 +177,14 @@ const styles = StyleSheet.create({
     right: 15,
   },
   mapButton: {
-    backgroundColor: colors.PINK_700,
+    backgroundColor: colors[theme].PINK_700,
     marginVertical: 5,
     height: 48,
     width: 48,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 30,
-    shadowColor: colors.BLACK,
+    shadowColor: colors[theme].BLACK,
     shadowOffset: {width: 1, height: 2},
     shadowOpacity: 0.5,
     elevation: 2,
