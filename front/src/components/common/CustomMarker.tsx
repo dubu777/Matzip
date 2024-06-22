@@ -1,4 +1,6 @@
-import { colors } from '@/constants';
+import { colorHex, colors } from '@/constants';
+import useThemeStorage from '@/hooks/useThemeStorage';
+import { ThemeMode } from '@/types';
 import { MarkerColor } from '@/types/domain';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
@@ -11,16 +13,10 @@ interface CustomMarkerProps extends MyMapMarkerprops{
   score?: number;
 }
 
-const colorHex = {
-  RED: colors.PINK_400,
-  BLUE: colors.BLUE_400,
-  GREEN: colors.GREEN_400,
-  YELLOW: colors.YELLOW_400,
-  PURPLE: colors.PURPLE_400,
-};
-
 
 function CustomMarker({coordinate, color, score=5, ...props}: CustomMarkerProps) {
+  const {theme} = useThemeStorage();
+  const styles = styling(theme);
   const markerView = (
     <View style={styles.container}>
         <View style={[styles.marker, {backgroundColor: colorHex[color]}]}>
@@ -42,7 +38,7 @@ function CustomMarker({coordinate, color, score=5, ...props}: CustomMarkerProps)
   )
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   container: {
     height: 35,
     width: 32,
@@ -55,11 +51,11 @@ const styles = StyleSheet.create({
     borderRadius: 27,
     borderBottomRightRadius: 1,
     borderWidth: 1,
-    borderColor: colors.BLACK,
+    borderColor: colors[theme].BLACK,
   },
   eye: {
     position: 'absolute',
-    backgroundColor: colors.BLACK,
+    backgroundColor: colors[theme].BLACK,
     width: 4,
     height: 4,
     borderRadius: 4,
@@ -86,14 +82,14 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginTop: 5,
     borderRightColor: 'rgba(255,255,255 / 0.01)',
-    borderLeftColor: colors.BLACK,
+    borderLeftColor: colors[theme].BLACK,
   },
   soso: {
     marginLeft: 13,
     marginTop: 13,
     width: 8,
     height: 8,
-    borderLeftColor: colors.BLACK,
+    borderLeftColor: colors[theme].BLACK,
     borderLeftWidth: 1,
     transform: [{rotate: '45deg'}],
   },
@@ -101,7 +97,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     marginTop: 12,
     borderRightColor: 'rgba(255,255,255 / 0.01)',
-    borderLeftColor: colors.BLACK,
+    borderLeftColor: colors[theme].BLACK,
   },
 
 });

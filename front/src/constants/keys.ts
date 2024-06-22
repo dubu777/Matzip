@@ -13,8 +13,12 @@ const queryKeys = {
 } as const
 
 
-const storageKeys ={
+const storageKeys = {
   REFRESH_TOKEN: 'refreshToken',
-} as const
+  THEME_MODE: 'themeMode',
+  THEME_SYSTEM: 'themeSystem',
+  SHOW_LEGEND: 'showLegend',
+  MARKER_FILTER: 'markerFilter',
+} as const;
 
 export {queryKeys, storageKeys}

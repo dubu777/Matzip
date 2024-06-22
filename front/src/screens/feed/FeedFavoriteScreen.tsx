@@ -16,7 +16,7 @@ function FeedFavoriteScreen({}: FeedFavoriteScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.WHITE,
+    backgroundColor: colors[theme].WHITE,
   }
 
 });

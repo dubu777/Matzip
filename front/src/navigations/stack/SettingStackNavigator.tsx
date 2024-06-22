@@ -6,6 +6,7 @@ import SettingHeaderLeft from '@/components/setting/SettingHeaderLeft';
 import SettingHomeScreen from '@/screens/setting/SettingHomeScreen';
 import DeleteAccountScreen from '@/screens/setting/DeleteAccountScreen';
 import EditCategoryScreen from '@/screens/setting/EditCategoryScreen';
+import useThemeStorage from '@/hooks/useThemeStorage';
 
 
 export type SettingStackParamList = {
@@ -18,11 +19,12 @@ export type SettingStackParamList = {
 const Stack = createStackNavigator<SettingStackParamList>();
 
 function SettingStackNavigator() {
+  const {theme} = useThemeStorage();
   return (
     <Stack.Navigator
       screenOptions={{
         cardStyle: {
-          backgroundColor: colors.GRAY_100,
+          backgroundColor: colors[theme].GRAY_100,
         },
         headerStyle: {
           backgroundColor: 'white',
@@ -47,7 +49,7 @@ function SettingStackNavigator() {
         options={{
           headerTitle: '프로필 수정',
           cardStyle: {
-            backgroundColor: colors.WHITE,
+            backgroundColor: colors[theme].WHITE,
           }
         }}
       />
@@ -57,7 +59,7 @@ function SettingStackNavigator() {
         options={{
           headerTitle: '회원탈퇴',
           cardStyle: {
-            backgroundColor: colors.WHITE,
+            backgroundColor: colors[theme].WHITE,
           }
         }}
       />
@@ -67,7 +69,7 @@ function SettingStackNavigator() {
         options={{
           headerTitle: '카테고리 설정',
           cardStyle: {
-            backgroundColor: colors.WHITE,
+            backgroundColor: colors[theme].WHITE,
           }
         }}
       />

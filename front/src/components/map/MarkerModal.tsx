@@ -85,7 +85,7 @@ function MarkerModal({markerId, isVisible, hide}: MarkerModalProps) {
               )}
               <View style={styles.infoContainer}>
                 <View style={styles.addressContainer}>
-                  <Octicons name="location" size={10} color={colors.GRAY_500} />
+                  <Octicons name="location" size={10} color={colors[theme].GRAY_500} />
                   <Text
                     style={styles.addressText}
                     ellipsizeMode="tail"
@@ -104,7 +104,7 @@ function MarkerModal({markerId, isVisible, hide}: MarkerModalProps) {
               <MaterialIcons
                 name="arrow-forward-ios"
                 size={20}
-                color={colors.BLACK}
+                color={colors[theme].BLACK}
               />
             </View>
           </View>
@@ -120,14 +120,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   cardContainer: {
-    backgroundColor: colors.WHITE,
+    backgroundColor: colors[theme].WHITE,
     margin: 10,
     borderRadius: 20,
-    shadowColor: colors.BLACK,
+    shadowColor: colors[theme].BLACK,
     shadowOffset: {width: 3, height: 3},
     shadowOpacity: 0.2,
     elevation: 1,
-    borderColor: colors.GRAY_500,
+    borderColor: colors[theme].GRAY_500,
     borderWidth: 1.5,
   },
   cardInner: {
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   emptyImageContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: colors.GRAY_200,
+    borderColor: colors[theme].GRAY_200,
     borderRadius: 35,
     borderWidth: 1,
   },
@@ -170,18 +170,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   addressText: {
-    color: colors.GRAY_500,
+    color: colors[theme].GRAY_500,
     fontSize: 10,
   },
   titleText: {
-    color: colors.BLACK,
+    color: colors[theme].BLACK,
     fontSize: 15,
     fontWeight: 'bold',
   },
   dateText: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: colors.PINK_700,
+    color: colors[theme].PINK_700,
   },
   nextButton: {
     width: 40,

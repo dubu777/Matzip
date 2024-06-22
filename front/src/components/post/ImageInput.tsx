@@ -16,7 +16,7 @@ function ImageInput({onChange}: ImageInputProps) {
         styles.imageInput,
       ]}
       onPress={onChange}>
-      <Ionicons name="camera-outline" size={20} color={colors.GRAY_500} />
+      <Ionicons name="camera-outline" size={20} color={colors[theme].GRAY_500} />
       <Text style={styles.inputText}>사진 추가</Text>
     </Pressable>
   );
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   imageInput: {
     borderWidth: 1.5,
     borderStyle: 'dotted',
-    borderColor: colors.GRAY_300,
+    borderColor: colors[theme].GRAY_300,
     height: 70,
     width: 70,
     alignItems: 'center',
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     fontSize: 12,
-    color: colors.GRAY_500,
+    color: colors[theme].GRAY_500,
   },
 });
 

@@ -60,7 +60,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
       </DrawerContentScrollView>
       <View style={styles.bottomContainer}>
         <Pressable style={styles.bottomMenu} onPress={handlePressSetting}>
-          <MaterialIcons name={'settings'} color={colors.GRAY_700} size={18} />
+          <MaterialIcons name={'settings'} color={colors[theme].GRAY_700} size={18} />
           <Text style={styles.bottomMenuItem}>설정</Text>
         </Pressable>
       </View>
@@ -73,10 +73,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentContainer: {
-    backgroundColor: colors.WHITE,
+    backgroundColor: colors[theme].WHITE,
   },
   nameText: {
-    color: colors.BLACK,
+    color: colors[theme].BLACK,
   },
   userInfoContainer: {
     alignItems: 'center',
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderTopWidth: 1,
-    borderTopColor: colors.GRAY_200,
+    borderTopColor: colors[theme].GRAY_200,
   },
   bottomMenu: {
     flexDirection: 'row',
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   bottomMenuItem: {
     fontWeight: '600',
     fontSize: 15,
-    color: colors.GRAY_700,
+    color: colors[theme].GRAY_700,
   },
 });
 

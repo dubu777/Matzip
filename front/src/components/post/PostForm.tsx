@@ -122,7 +122,7 @@ function PostForm({location, isEdit = false}: PostFormProps) {
             value={address}
             disabled
             icon={
-              <Octicons name="location" size={16} color={colors.GRAY_500} />
+              <Octicons name="location" size={16} color={colors[theme].GRAY_500} />
             }
           />
           <CustomButton

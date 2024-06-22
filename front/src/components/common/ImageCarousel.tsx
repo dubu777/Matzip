@@ -1,5 +1,6 @@
 import {colors} from '@/constants';
-import {ImageUri} from '@/types';
+import useThemeStorage from '@/hooks/useThemeStorage';
+import {ImageUri, ThemeMode} from '@/types';
 import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {
@@ -24,6 +25,8 @@ interface ImageCarouselProps {
 const deviceWidth = Dimensions.get('window').width;
 
 function ImageCarousel({images, pressedIndex = 0}: ImageCarouselProps) {
+  const {theme} = useThemeStorage();
+  const styles = styling(theme);
   const navigation = useNavigation();
   const inset = useSafeAreaInsets();
   const [page, setPage] = useState(pressedIndex);
@@ -37,7 +40,7 @@ function ImageCarousel({images, pressedIndex = 0}: ImageCarouselProps) {
       <Pressable
         style={[styles.backButton, {marginTop: inset.top + 10}]}
         onPress={() => navigation.goBack()}>
-        <Octicons name="arrow-left" size={30} color={colors.WHITE} />
+        <Octicons name="arrow-left" size={30} color={colors[theme].WHITE} />
       </Pressable>
       <FlatList
         data={images}
@@ -83,11 +86,11 @@ function ImageCarousel({images, pressedIndex = 0}: ImageCarouselProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: colors.WHITE,
+    backgroundColor: colors[theme].WHITE,
   },
   backButton: {
     position: 'absolute',
@@ -96,7 +99,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 40,
-    backgroundColor: colors.PINK_700,
+    backgroundColor: colors[theme].PINK_700,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -111,13 +114,13 @@ const styles = StyleSheet.create({
   },
   pageDot: {
     margin: 4,
-    backgroundColor: colors.GRAY_200,
+    backgroundColor: colors[theme].GRAY_200,
     width: 8,
     height: 8,
     borderRadius: 4,
   },
   currentPageDot: {
-    backgroundColor: colors.PINK_700,
+    backgroundColor: colors[theme].PINK_700,
   },
 });
 

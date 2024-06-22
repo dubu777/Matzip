@@ -1,4 +1,6 @@
 import { colors } from '@/constants';
+import useThemeStorage from '@/hooks/useThemeStorage';
+import { ThemeMode } from '@/types';
 import React, { ReactNode } from 'react';
 import {
   Pressable,
@@ -36,6 +38,8 @@ function CustomButton({
   ...props
 }: // ...props 로 PressableProps를 전부 받아준다.
 CustomButtonProps) {
+  const {theme} = useThemeStorage();
+  const styles = styling(theme);
   return (
     <Pressable
       disabled={inVailed}
@@ -55,7 +59,7 @@ CustomButtonProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   container: {
     borderRadius: 3,
     justifyContent: 'center',
@@ -65,17 +69,17 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   filled: {
-    backgroundColor: colors.PINK_700,
+    backgroundColor: colors[theme].PINK_700,
   },
   outlined: {
-    borderColor: colors.PINK_700,
+    borderColor: colors[theme].PINK_700,
     borderWidth: 1,
   },
   filledPressed: {
-    backgroundColor: colors.PINK_500,
+    backgroundColor: colors[theme].PINK_500,
   },
   outlinedPressed: {
-    borderColor: colors.PINK_700,
+    borderColor: colors[theme].PINK_700,
     borderWidth: 1,
     opacity: 0.5,
   },
@@ -96,10 +100,10 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   filledText: {
-    color: colors.WHITE,
+    color: colors[theme].WHITE,
   },
   outlinedText: {
-    color: colors.PINK_700,
+    color: colors[theme].PINK_700,
   },
   text: {
     fontSize: 16,

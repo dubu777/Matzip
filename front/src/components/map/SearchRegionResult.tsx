@@ -45,7 +45,7 @@ function SearchRegionResult({regionInfo}: SearchRegionResultProps) {
             ]}
           >
             <View style={styles.placeNameContainer}>
-              <Octicons name='location' size={25} color={colors.PINK_700} />
+              <Octicons name='location' size={25} color={colors[theme].PINK_700} />
               <Text style={styles.placeText} ellipsizeMode='tail' numberOfLines={1}>{info.place_name}</Text>
             </View>
             <View style={styles.categoryContainer}>
@@ -71,7 +71,7 @@ function SearchRegionResult({regionInfo}: SearchRegionResultProps) {
 const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
-    borderColor: colors.GRAY_200,
+    borderColor: colors[theme].GRAY_200,
     borderRadius: 5,
     height: Dimensions.get('screen').height / 2,
     marginVertical: 5,
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   placeText: {
-    color: colors.BLACK,
+    color: colors[theme].BLACK,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: '600',
@@ -96,16 +96,16 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   distanceText: {
-    color: colors.BLACK,
+    color: colors[theme].BLACK,
   },
   subInfoText: {
     flexShrink: 1,
-    color: colors.GRAY_500,
+    color: colors[theme].GRAY_500,
   },
   itemBorder: {
     marginHorizontal: 5,
     paddingVertical: 10,
-    borderBottomColor: colors.GRAY_300,
+    borderBottomColor: colors[theme].GRAY_300,
     borderBottomWidth: StyleSheet.hairlineWidth,
     gap: 3,
   },
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   noResultText: {
-    color: colors.GRAY_500,
+    color: colors[theme].GRAY_500,
     fontSize: 16,
   },
 });

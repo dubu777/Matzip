@@ -29,6 +29,7 @@ import Toast from 'react-native-toast-message';
 import useLocationStore from '@/store/useLocationStore';
 import useThemeStorage from '@/hooks/useThemeStorage';
 import { ThemeMode } from '@/types';
+import getMapStyle from '@/style/mapStyle';
 
 console.log(Config.GOOGLE_API_KEY, 'config');
 console.log(Config.TEST, 'config test');
@@ -107,7 +108,7 @@ function MapHomeScreen() {
         showsUserLocation
         followsUserLocation
         showsMyLocationButton
-        customMapStyle={mapStyle}
+        customMapStyle={getMapStyle(theme)}
         onLongPress={handleLongPressMapView}
         onRegionChangeComplete={handleChangeDelta}
         region={{

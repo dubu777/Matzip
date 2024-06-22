@@ -34,7 +34,7 @@ function TabBarIcons(route: RouteProp<FeedTabParamList>, focused: boolean) {
   return (
     <Ionicons
       name={iconName}
-      color={focused ? colors.PINK_700 : colors.GRAY_500}
+      color={focused ? colors[theme].PINK_700 : colors[theme].GRAY_500}
       size={25}
     />
   );
@@ -45,18 +45,18 @@ function FeedTabNavigator() {
     <Tab.Navigator
       screenOptions={({route}) => ({
         headerStyle: {
-          backgroundColor: colors.WHITE,
-          shadowColor: colors.GRAY_200,
+          backgroundColor: colors[theme].WHITE,
+          shadowColor: colors[theme].GRAY_200,
         },
         headerTitleStyle: {
           fontSize: 15,
         },
-        headerTintColor: colors.BLACK,
+        headerTintColor: colors[theme].BLACK,
         tabBarShowLabel: false,
-        tabBarActiveTintColor: colors.PINK_700,
+        tabBarActiveTintColor: colors[theme].PINK_700,
         tabBarStyle: {
-          backgroundColor: colors.WHITE,
-          borderTopColor: colors.GRAY_200,
+          backgroundColor: colors[theme].WHITE,
+          borderTopColor: colors[theme].GRAY_200,
           borderTopWidth: StyleSheet.hairlineWidth,
         },
         tabBarIcon: ({focused}) => TabBarIcons(route, focused),
@@ -79,8 +79,8 @@ function FeedTabNavigator() {
                 return {display: 'none'}
               }
               return {
-                backgroundColor: colors.WHITE,
-                borderTopColor: colors.GRAY_200,
+                backgroundColor: colors[theme].WHITE,
+                borderTopColor: colors[theme].GRAY_200,
                 borderTopWidth: StyleSheet.hairlineWidth,
               };
           })(route),

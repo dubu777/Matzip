@@ -2,6 +2,8 @@ import React from 'react';
 import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
 
 import {colors} from '@/constants';
+import useThemeStorage from '@/hooks/useThemeStorage';
+import { ThemeMode } from '@/types';
 
 interface DateBoxProps {
   date: number;
@@ -20,6 +22,8 @@ function DateBox({
   selectedDate,
   onPressDate,
 }: DateBoxProps) {
+  const {theme} = useThemeStorage();
+  const styles = styling(theme);
   return (
     <Pressable style={styles.container} onPress={() => onPressDate(date)}>
       {date > 0 && (
@@ -47,12 +51,12 @@ function DateBox({
   );
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   container: {
     width: deviceWidth / 7,
     height: deviceWidth / 7,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.GRAY_200,
+    borderTopColor: colors[theme].GRAY_200,
     alignItems: 'center',
   },
   dateContainer: {
@@ -64,32 +68,32 @@ const styles = StyleSheet.create({
     borderRadius: 28,
   },
   selectedContainer: {
-    backgroundColor: colors.BLACK,
+    backgroundColor: colors[theme].BLACK,
   },
   selectedTodayContainer: {
-    backgroundColor: colors.PINK_700,
+    backgroundColor: colors[theme].PINK_700,
   },
   dateText: {
     fontSize: 17,
-    color: colors.BLACK,
+    color: colors[theme].BLACK,
   },
   todayText: {
-    color: colors.PINK_700,
+    color: colors[theme].PINK_700,
     fontWeight: 'bold',
   },
   selectedDateText: {
-    color: colors.WHITE,
+    color: colors[theme].WHITE,
     fontWeight: 'bold',
   },
   selectedTodayText: {
-    color: colors.WHITE,
+    color: colors[theme].WHITE,
   },
   scheduleIndicator: {
     marginTop: 2,
     width: 6,
     height: 6,
     borderRadius: 6,
-    backgroundColor: colors.GRAY_500,
+    backgroundColor: colors[theme].GRAY_500,
   },
 });
 

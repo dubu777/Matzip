@@ -7,6 +7,8 @@ import useForm from '@/hooks/useForm';
 import useImagePicker from '@/hooks/useImagePicker';
 import useModal from '@/hooks/useModal';
 import {SettingStackParamList} from '@/navigations/stack/SettingStackNavigator';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 import {validateEditProfile} from '@/utils';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
@@ -26,6 +28,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 type EditProfileScreenProps = StackScreenProps<SettingStackParamList>;
 
 function EditProfileScreen({navigation}: EditProfileScreenProps) {
+  const {theme} = useThemeStore();
+  const styles = styling(theme);
   const {getProfileQuery, profileMutation} = useAuth();
   const {nickname, imageUri, kakaoImageUri} = getProfileQuery.data || {};
   const imageOption = useModal();
@@ -79,7 +83,7 @@ function EditProfileScreen({navigation}: EditProfileScreenProps) {
           style={[styles.imageContainer, styles.emptyImageContainer]}
           onPress={handlePressImage}>
           {imagePicker.imageUris.length === 0 && !kakaoImageUri && (
-            <Ionicons name="camera-outline" size={30} color={colors.GRAY_500} />
+            <Ionicons name="camera-outline" size={30} color={colors[theme].GRAY_500} />
           )}
           {imagePicker.imageUris.length === 0 && kakaoImageUri && (
             <Image
@@ -118,7 +122,7 @@ function EditProfileScreen({navigation}: EditProfileScreenProps) {
       <Pressable
         style={styles.deleteAccountContainer}
         onPress={() => navigation.navigate(settingNavigations.DELETE_ACCOUNT)}>
-        <Ionicons name="remove-circle-sharp" size={18} color={colors.RED_500} />
+        <Ionicons name="remove-circle-sharp" size={18} color={colors[theme].RED_500} />
         <Text style={styles.deleteAccountText}>회원탈퇴</Text>
       </Pressable>
       <EditProfileImageOption
@@ -130,7 +134,7 @@ function EditProfileScreen({navigation}: EditProfileScreenProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
@@ -153,7 +157,7 @@ const styles = StyleSheet.create({
   emptyImageContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: colors.GRAY_200,
+    borderColor: colors[theme].GRAY_200,
     borderRadius: 50,
     borderWidth: 1,
   },
@@ -165,12 +169,12 @@ const styles = StyleSheet.create({
     gap: 5,
     right: 20,
     bottom: 70,
-    backgroundColor: colors.GRAY_100,
+    backgroundColor: colors[theme].GRAY_100,
     borderRadius: 10,
     padding: 10,
   },
   deleteAccountText: {
-    color: colors.RED_500,
+    color: colors[theme].RED_500,
     fontSize: 15,
   },
 });

@@ -17,7 +17,7 @@ type FeedHomeHeaderLeftProps = CompositeNavigationProp<
 function FeedHomeHeaderLeft(navigation: FeedHomeHeaderLeftProps) {
   return (
     <HeaderButton
-      icon={<Ionicons name="menu" color={colors.BLACK} size={25} />}
+      icon={<Ionicons name="menu" color={colors[theme].BLACK} size={25} />}
       onPress={() => navigation.openDrawer()}
     />
   );

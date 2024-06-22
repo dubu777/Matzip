@@ -62,7 +62,7 @@ function PreviewImageList({
                     <Pressable
                       style={[styles.imageButton, styles.deleteButton]}
                       onPress={() => onDelete && onDelete(uri)}>
-                      <Ionicons name={'close'} size={16} color={colors.WHITE} />
+                      <Ionicons name={'close'} size={16} color={colors[theme].WHITE} />
                     </Pressable>
 
                     {index > 0 && (
@@ -74,7 +74,7 @@ function PreviewImageList({
                         <Ionicons
                           name={'arrow-back-outline'}
                           size={16}
-                          color={colors.WHITE}
+                          color={colors[theme].WHITE}
                         />
                       </Pressable>
                     )}
@@ -87,7 +87,7 @@ function PreviewImageList({
                         <Ionicons
                           name={'arrow-forward-outline'}
                           size={16}
-                          color={colors.WHITE}
+                          color={colors[theme].WHITE}
                         />
                       </Pressable>
                     )}
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   imageButton: {
     position: 'absolute',
-    backgroundColor: colors.BLACK,
+    backgroundColor: colors[theme].BLACK,
     zIndex: 1,
   },
   deleteButton: {

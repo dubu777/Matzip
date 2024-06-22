@@ -1,5 +1,7 @@
 import { colors } from '@/constants';
 import useAuth from '@/hooks/queries/useAuth';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 import axios from 'axios';
 import React, { useState } from 'react';
 import {ActivityIndicator, Dimensions, Platform, SafeAreaView} from 'react-native';
@@ -12,10 +14,12 @@ const KAKAO_REDIRECT_URI = `${
 }auth/oauth/kakao`;
 
 function KakaoLoginScreen() {
+  const {theme} = useThemeStore();
+  const styles = styling(theme);
   const [isLoading, setIsLoading] = useState(false);
   const [isChangeNavigation, setIsChangeNavigation] = useState(true);
   const {kakaoLoginMutation} = useAuth();
-  
+
   const handleOnMessage = (event: WebViewMessageEvent) => {
     // KAKAO_REDIRECT_URI가 uri에 포함되어있으면
     if(event.nativeEvent.url.includes(`${KAKAO_REDIRECT_URI}?code=`)) {
@@ -49,7 +53,7 @@ function KakaoLoginScreen() {
     <SafeAreaView style={styles.container}>
       {(isLoading || isChangeNavigation) && (
         <View style={styles.kakaoLoadingContainer}>
-          <ActivityIndicator size={'small'} color={colors.BLACK}/>
+          <ActivityIndicator size={'small'} color={colors[theme].BLACK}/>
         </View>
       )}
       <WebView
@@ -67,12 +71,12 @@ function KakaoLoginScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   container: {
     flex: 1,
   },
   kakaoLoadingContainer: {
-    backgroundColor: colors.WHITE,
+    backgroundColor: colors[theme].WHITE,
     height: Dimensions.get('window').height,
     paddingBottom: 100,
     alignItems: 'center',

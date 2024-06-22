@@ -3,6 +3,8 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
 
 import {colors} from '@/constants';
+import useThemeStorage from '@/hooks/useThemeStorage';
+import { ThemeMode } from '@/types';
 
 interface PaginationProps {
   pageParam: number;
@@ -19,6 +21,8 @@ function Pagination({
   hasNextPage,
   totalLength,
 }: PaginationProps) {
+  const {theme} = useThemeStorage();
+  const styles = styling(theme);
   return (
     <View style={styles.container}>
       <Pressable
@@ -28,7 +32,7 @@ function Pagination({
         <Octicons
           name="arrow-left"
           size={15}
-          color={pageParam > 1 ? colors.BLACK : colors.GRAY_300}
+          color={pageParam > 1 ? colors[theme].BLACK : colors[theme].GRAY_300}
           onPress={fetchPrevPage}
           disabled={pageParam <= 1}
         />
@@ -53,7 +57,7 @@ function Pagination({
           name="arrow-right"
           size={15}
           color={
-            totalLength > 0 && hasNextPage ? colors.BLACK : colors.GRAY_300
+            totalLength > 0 && hasNextPage ? colors[theme].BLACK : colors[theme].GRAY_300
           }
           onPress={fetchNextPage}
           disabled={totalLength === 0 || !hasNextPage}
@@ -63,7 +67,7 @@ function Pagination({
   );
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
@@ -79,11 +83,11 @@ const styles = StyleSheet.create({
   },
   pageText: {
     fontSize: 15,
-    color: colors.BLACK,
+    color: colors[theme].BLACK,
   },
   disabledPageText: {
     fontSize: 15,
-    color: colors.GRAY_300,
+    color: colors[theme].GRAY_300,
   },
 });
 

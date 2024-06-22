@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     fontWeight: '500',
     padding: 10,
-    color: colors.BLACK,
+    color: colors[theme].BLACK,
   },
 });
 

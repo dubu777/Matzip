@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import {colors} from '../../constants';
 import {mergeRefs} from '../../utils/common';
+import useThemeStorage from '@/hooks/useThemeStorage';
+import { ThemeMode } from '@/types';
 
 interface InputFieldProps extends TextInputProps {
   disabled?: boolean;
@@ -22,11 +24,12 @@ const deviceHeight = Dimensions.get('screen').height;
 
 const InputField = forwardRef(
   (
-    {disabled = false, error, touched, icon=null, ...props}: InputFieldProps,
+    {disabled = false, error, touched, icon = null, ...props}: InputFieldProps,
     ref?: ForwardedRef<TextInput>,
   ) => {
     const innerRef = useRef<TextInput | null>(null);
-
+    const {theme} = useThemeStorage();
+    const styles = styling(theme);
     const handlePressInput = () => {
       innerRef.current?.focus();
     };
@@ -45,7 +48,7 @@ const InputField = forwardRef(
             <TextInput
               ref={ref ? mergeRefs(innerRef, ref) : innerRef} // inputField 에서 사용하고 있는 ref 와 받아오는 ref 둘다 사용하기 위해
               editable={!disabled}
-              placeholderTextColor={colors.GRAY_500}
+              placeholderTextColor={colors[theme].GRAY_500}
               style={[styles.input, disabled && styles.disabled]}
               autoCapitalize="none" // 첫글자 대문자 끄기
               spellCheck={false} // 스펠 체크 끄기
@@ -62,27 +65,27 @@ const InputField = forwardRef(
   },
 );
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   container: {
     borderWidth: 1,
-    borderColor: colors.GRAY_200,
+    borderColor: colors[theme].GRAY_200,
     padding: deviceHeight > 700 ? 15 : 10,
   },
   input: {
     fontSize: 16,
-    color: colors.BLACK,
+    color: colors[theme].BLACK,
     padding: 0,
   },
   disabled: {
-    backgroundColor: colors.GRAY_200,
-    color: colors.GRAY_700,
+    backgroundColor: colors[theme].GRAY_200,
+    color: colors[theme].GRAY_700,
   },
   inputError: {
     borderWidth: 1,
-    borderColor: colors.RED_300,
+    borderColor: colors[theme].RED_300,
   },
   error: {
-    color: colors.RED_500,
+    color: colors[theme].RED_500,
     fontSize: 12,
     paddingTop: 5,
   },
@@ -93,7 +96,7 @@ const styles = StyleSheet.create({
   },
   multiLine: {
     paddingBottom: deviceHeight > 700 ? 45 : 30,
-  }
+  },
 });
 
 export default InputField;

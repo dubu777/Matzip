@@ -50,7 +50,7 @@ const MarkerSelector = ({markerColor, score, onPressMarker}: MarkerSelectorProps
 const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
-    borderColor: colors.GRAY_200,
+    borderColor: colors[theme].GRAY_200,
     padding: 15,
   },
   markerInputScroll: {
@@ -59,19 +59,19 @@ const styles = StyleSheet.create({
   },
   markerLabel: {
     marginBottom: 15,
-    color: colors.GRAY_700,
+    color: colors[theme].GRAY_700,
   },
   markerBox: {
     alignItems: 'center',
     justifyContent: 'center',
     width: 50,
     height: 50,
-    backgroundColor: colors.GRAY_100,
+    backgroundColor: colors[theme].GRAY_100,
     borderRadius: 6,
   },
   pressedMarker: {
     borderWidth: 2,
-    borderColor: colors.RED_500,
+    borderColor: colors[theme].RED_500,
   },
 });
 

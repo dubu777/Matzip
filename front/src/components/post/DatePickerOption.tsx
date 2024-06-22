@@ -30,7 +30,7 @@ function DatePickerOption({
           <View style={styles.pickerContainer}>
             <DatePicker
               mode="date"
-              dividerColor={colors.BLACK}
+              dividerColor={colors[theme].BLACK}
               date={date}
               onDateChange={onChangeDate}
               locale="ko"
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginHorizontal: 10,
     marginBottom: 10,
-    backgroundColor: colors.GRAY_100,
+    backgroundColor: colors[theme].GRAY_100,
     overflow: 'hidden',
   },
   optionButton: {
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 17,
-    color: colors.BLUE_500,
+    color: colors[theme].BLUE_500,
     fontWeight: '500',
   },
 });

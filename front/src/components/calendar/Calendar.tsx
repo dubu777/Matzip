@@ -10,6 +10,8 @@ import DateBox from './DateBox';
 import {ResponseCalendarPost} from '@/api';
 import YearSelector from './YearSelector';
 import useModal from '@/hooks/useModal';
+import useThemeStorage from '@/hooks/useThemeStorage';
+import { ThemeMode } from '@/types';
 
 interface CalenderProps<T> {
   monthYear: MonthYear;
@@ -26,6 +28,8 @@ function Calender<T>({
   selectedDate,
   schedules,
 }: CalenderProps<T>) {
+  const {theme} = useThemeStorage();
+  const styles = styling(theme);
   const {month, year, lastDate, firstDOW} = monthYear;
   const yearSelector = useModal();
   const handleChangeYear = (selectYear: number) => {
@@ -39,7 +43,7 @@ function Calender<T>({
         <Pressable
           style={styles.monthYearContainer}
           onPress={() => onChangeMonth(-1)}>
-          <Ionicons name="arrow-back" size={25} color={colors.BLACK} />
+          <Ionicons name="arrow-back" size={25} color={colors[theme].BLACK} />
         </Pressable>
         <Pressable
           style={styles.monthYearContainer}
@@ -50,13 +54,13 @@ function Calender<T>({
           <MaterialIcons
             name="keyboard-arrow-down"
             size={20}
-            color={colors.GRAY_500}
+            color={colors[theme].GRAY_500}
           />
         </Pressable>
         <Pressable
           style={styles.monthYearContainer}
           onPress={() => onChangeMonth(1)}>
-          <Ionicons name="arrow-forward" size={25} color={colors.BLACK} />
+          <Ionicons name="arrow-forward" size={25} color={colors[theme].BLACK} />
         </Pressable>
       </View>
       <DayOfWeeks />
@@ -89,7 +93,7 @@ function Calender<T>({
   );
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -104,8 +108,8 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.GRAY_300,
-    backgroundColor: colors.GRAY_100,
+    borderBottomColor: colors[theme].GRAY_300,
+    backgroundColor: colors[theme].GRAY_100,
   },
 });
 

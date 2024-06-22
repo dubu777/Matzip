@@ -48,7 +48,7 @@ function FeedStackNavigator() {
           headerShown: false,
           headerTitle: '',
           cardStyle:{
-            backgroundColor: colors.GRAY_100
+            backgroundColor: colors[theme].GRAY_100
           }
         }}
       />
