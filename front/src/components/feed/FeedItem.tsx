@@ -14,6 +14,8 @@ import {getDateWithSeparator} from '@/utils';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { FeedStackParamList } from '@/navigations/stack/FeedStackNavigator';
+import { ThemeMode } from '@/types';
+import useThemeStore from '@/store/useThemeStore';
 
 interface FeedItemProps {
   post: ResponsePost;
@@ -22,6 +24,8 @@ interface FeedItemProps {
 type Navigation = StackNavigationProp<FeedStackParamList>
 
 function FeedItem({post}: FeedItemProps) {
+  const {theme} = useThemeStore();
+  const styles = styling(theme);
   const navigation = useNavigation<Navigation>();
   const handlePressFeed = () => {
     navigation.navigate(feedNavigations.FEED_DETAIL, {id: post.id})
@@ -66,7 +70,7 @@ function FeedItem({post}: FeedItemProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   container: {
     flex: 1,
     margin: 5,

@@ -3,12 +3,16 @@ import {Pressable, StyleSheet, Text} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {colors} from '@/constants';
+import { ThemeMode } from '@/types';
+import useThemeStore from '@/store/useThemeStore';
 
 interface ImageInputProps {
   onChange: () => void;
 }
 
 function ImageInput({onChange}: ImageInputProps) {
+  const {theme} = useThemeStore();
+  const styles = styling(theme);
   return (
     <Pressable
       style={({pressed}) => [
@@ -22,7 +26,7 @@ function ImageInput({onChange}: ImageInputProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   imageInput: {
     borderWidth: 1.5,
     borderStyle: 'dotted',

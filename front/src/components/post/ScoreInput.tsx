@@ -3,6 +3,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import Slider from '@react-native-community/slider';
 
 import {colors} from '@/constants';
+import useThemeStorage from '@/hooks/useThemeStorage';
+import { ThemeMode } from '@/types';
 
 interface ScoreInputProps {
   score: number;
@@ -10,6 +12,8 @@ interface ScoreInputProps {
 }
 
 function ScoreInput({score, onChangeScore}: ScoreInputProps) {
+  const {theme} = useThemeStorage()
+  const styles = styling(theme)
   return (
     <View style={styles.container}>
       <View style={styles.labelContainer}>
@@ -30,7 +34,7 @@ function ScoreInput({score, onChangeScore}: ScoreInputProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,

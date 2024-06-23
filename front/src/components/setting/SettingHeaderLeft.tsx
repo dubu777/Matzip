@@ -8,6 +8,7 @@ import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {MainDrawerParamList} from '@/navigations/drawer/MainDrawerNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SettingStackParamList} from '@/navigations/stack/SettingStackNavigator';
+import useThemeStore from '@/store/useThemeStore';
 
 interface SettingHeaderLeftProps {}
 
@@ -17,6 +18,7 @@ type Navigation = CompositeNavigationProp<
 >;
 
 function SettingHeaderLeft({}: SettingHeaderLeftProps) {
+  const {theme} = useThemeStore();
   const navigation = useNavigation<Navigation>();
   return (
     <HeaderButton
@@ -26,6 +28,5 @@ function SettingHeaderLeft({}: SettingHeaderLeftProps) {
   );
 }
 
-const styles = StyleSheet.create({});
 
 export default SettingHeaderLeft;

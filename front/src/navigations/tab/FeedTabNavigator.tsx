@@ -6,6 +6,7 @@ import {StyleSheet} from 'react-native';
 import {RouteProp, getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeedHomeHeaderLeft from '@/components/feed/FeedHomeHeaderLeft';
+import useThemeStore from '@/store/useThemeStore';
 
 export type FeedTabParamList = {
   [feedTabNavigations.FEED_HOME]: {
@@ -19,6 +20,7 @@ export type FeedTabParamList = {
 const Tab = createBottomTabNavigator<FeedTabParamList>();
 
 function TabBarIcons(route: RouteProp<FeedTabParamList>, focused: boolean) {
+  const {theme} = useThemeStore();
   let iconName = '';
   switch (route.name) {
     case feedTabNavigations.FEED_HOME: {
@@ -41,6 +43,7 @@ function TabBarIcons(route: RouteProp<FeedTabParamList>, focused: boolean) {
 }
 
 function FeedTabNavigator() {
+  const {theme} = useThemeStore();
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({

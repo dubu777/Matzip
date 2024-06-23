@@ -16,6 +16,7 @@ import useModal from '@/hooks/useModal';
 import usePermission from '@/hooks/usePermission';
 import { FeedStackParamList } from '@/navigations/stack/FeedStackNavigator';
 import useDetailStore from '@/store/useDetailPostStore';
+import useThemeStore from '@/store/useThemeStore';
 import {MarkerColor} from '@/types/domain';
 import {getDateWithSeparator, validateAddPost} from '@/utils';
 import { useNavigation } from '@react-navigation/native';
@@ -40,6 +41,7 @@ interface PostFormProps {
 }
 
 function PostForm({location, isEdit = false}: PostFormProps) {
+  const {theme} = useThemeStore();
   const navigation = useNavigation<StackNavigationProp<FeedStackParamList>>()
   const descriptionRef = useRef<TextInput | null>(null);
   const createPost = useMutateCreatePost();

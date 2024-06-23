@@ -9,8 +9,9 @@ import {
 } from 'react-native';
 
 import {colors} from '@/constants';
-import type {MarkerColor} from '@/types';
+import type {MarkerColor, ThemeMode} from '@/types';
 import CustomMarker from '../common/CustomMarker';
+import useThemeStore from '@/store/useThemeStore';
 
 interface MarkerSelectorProps extends PressableProps {
   markerColor: MarkerColor;
@@ -27,6 +28,8 @@ const categoryList: MarkerColor[] = [
 ];
 
 const MarkerSelector = ({markerColor, score, onPressMarker}: MarkerSelectorProps) => {
+  const {theme} = useThemeStore();
+  const styles = styling(theme);
   return (
     <View style={styles.container}>
       <Text style={styles.markerLabel}>마커선택</Text>
@@ -46,8 +49,7 @@ const MarkerSelector = ({markerColor, score, onPressMarker}: MarkerSelectorProps
     </View>
   );
 };
-
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   container: {
     borderWidth: 1,
     borderColor: colors[theme].GRAY_200,

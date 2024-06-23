@@ -1,6 +1,8 @@
 import { colors } from '@/constants';
 import { RegionInfo } from '@/hooks/useSearchLocation';
 import useLocationStore from '@/store/useLocationStore';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {Dimensions, Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
@@ -12,6 +14,8 @@ interface SearchRegionResultProps {
 }
 
 function SearchRegionResult({regionInfo}: SearchRegionResultProps) {
+  const {theme} = useThemeStore();
+  const styles = styling(theme);
   const navigation = useNavigation();
   const {setMoveLocation, setSelectLocation} = useLocationStore();
   const handlePressRegionInfo = (latitude: string, longitude: string) => {
@@ -68,7 +72,7 @@ function SearchRegionResult({regionInfo}: SearchRegionResultProps) {
   )
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   container: {
     borderWidth: 1,
     borderColor: colors[theme].GRAY_200,

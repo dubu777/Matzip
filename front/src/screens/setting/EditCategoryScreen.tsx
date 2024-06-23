@@ -55,7 +55,7 @@ function EditCategoryScreen({navigation}: EditCategoryScreenProps) {
           type: 'success',
           text1: '저장되었습니다.',
           position: 'bottom',
-        })
+        })    
       },
       onError: error => {
         Toast.show({
@@ -64,6 +64,10 @@ function EditCategoryScreen({navigation}: EditCategoryScreenProps) {
           position: 'bottom',
         })
       },
+      onSettled: () => {
+        console.log(category.values, 'settled');
+        
+      }
     })
   }
 

@@ -2,6 +2,8 @@ import React, {ReactNode} from 'react';
 import {StyleSheet, Text, Pressable, PressableProps, View} from 'react-native';
 
 import {colors} from '@/constants';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 
 interface SettingItemProps extends PressableProps {
   title: string;
@@ -17,6 +19,8 @@ function SettingItem({
   color,
   ...props
 }: SettingItemProps) {
+  const {theme} = useThemeStore();
+  const styles = styling(theme);
   return (
     <Pressable
       style={({pressed}) => [
@@ -35,7 +39,8 @@ function SettingItem({
   );
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
+
   container: {
     flexDirection: 'row',
     alignItems: 'center',

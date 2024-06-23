@@ -30,6 +30,8 @@ import useLocationStore from '@/store/useLocationStore';
 import useThemeStorage from '@/hooks/useThemeStorage';
 import { ThemeMode } from '@/types';
 import getMapStyle from '@/style/mapStyle';
+import useLegendStorage from '@/hooks/useLegendStorage';
+import MapLegend from '@/components/map/MapLegend';
 
 console.log(Config.GOOGLE_API_KEY, 'config');
 console.log(Config.TEST, 'config test');
@@ -45,6 +47,7 @@ type Navigation = CompositeNavigationProp<
 
 function MapHomeScreen() {
   const {theme} = useThemeStorage();
+  const legend = useLegendStorage();
   const styles = styling(theme);
   const inset = useSafeAreaInsets(); // 아이폰은 헤더가 없어서 노치를 계산
   const navigation = useNavigation<Navigation>();
@@ -151,6 +154,7 @@ function MapHomeScreen() {
         isVisible={markerModal.isVisible}
         hide={markerModal.hide}
       />
+      {legend.isVisible && <MapLegend />}
     </>
   );
 }

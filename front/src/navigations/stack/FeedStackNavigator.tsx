@@ -7,6 +7,7 @@ import { LatLng } from 'react-native-maps';
 import FeedDetailScreen from '@/screens/feed/FeedDetailScreen';
 import EditPostScreen from '@/screens/feed/EditPostScreen';
 import ImageZoomScreen from '@/screens/feed/ImageZoomScreen';
+import useThemeStore from '@/store/useThemeStore';
 
 export type FeedStackParamList = {
   [feedNavigations.FEED_HOME]: undefined;
@@ -18,6 +19,7 @@ export type FeedStackParamList = {
 const Stack = createStackNavigator<FeedStackParamList>();
 
 function FeedStackNavigator() {
+  const {theme} = useThemeStore();
   return (
     <Stack.Navigator
       screenOptions={{

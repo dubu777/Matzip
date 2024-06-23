@@ -16,6 +16,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {colors} from '@/constants';
 import useThemeStore from '@/store/useThemeStore';
 import {ThemeMode} from '@/types';
+import useThemeStorage from '@/hooks/useThemeStorage';
 
 interface OptionContextValue {
   onClickOutSide?: (event: GestureResponderEvent) => void;

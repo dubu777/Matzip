@@ -10,9 +10,13 @@ import {
 import {Image, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
+  const {theme} = useThemeStore();
+  const styles = styling(theme);
   const {getProfileQuery} = useAuth();
   const {email, nickname, imageUri, kakaoImageUri} = getProfileQuery.data || {};
 
@@ -68,7 +72,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   container: {
     flex: 1,
   },

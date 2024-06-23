@@ -13,6 +13,7 @@ import FeedStackNavigator, {
 import FeedTabNavigator, {FeedTabParamList} from '../tab/FeedTabNavigator';
 import FeedHomeHeaderLeft from '@/components/feed/FeedHomeHeaderLeft';
 import SettingStackNavigator, { SettingStackParamList } from '../stack/SettingStackNavigator';
+import useThemeStore from '@/store/useThemeStore';
 
 
 // NavigatorScreenParams은 중첩된 네비게이터에 매개변수를 전달할 때 사용한다.
@@ -28,6 +29,7 @@ export type MainDrawerParamList = {
 const Drawer = createDrawerNavigator<MainDrawerParamList>();
 
 function DrawerIcons(route: RouteProp<MainDrawerParamList>, focused: boolean) {
+  const {theme} = useThemeStore();
   let iconName = '';
   switch (route.name) {
     case mainNavigations.HOME: {
@@ -57,6 +59,7 @@ function DrawerIcons(route: RouteProp<MainDrawerParamList>, focused: boolean) {
 }
 
 function MainDrawerNavigator() {
+  const {theme} = useThemeStore();
   return (
     <Drawer.Navigator
       drawerContent={CustomDrawerContent} // 드로워 커스텀

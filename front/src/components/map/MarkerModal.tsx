@@ -22,6 +22,8 @@ import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { FeedTabParamList } from '@/navigations/tab/FeedTabNavigator';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 
 interface MarkerModalProps {
   markerId: number | null;
@@ -35,6 +37,8 @@ type Navigation = CompositeNavigationProp<
 >
 
 function MarkerModal({markerId, isVisible, hide}: MarkerModalProps) {
+  const {theme} = useThemeStore();
+  const styles = styling(theme);
   const navigation = useNavigation<Navigation>();
   const {data: post, isPending, isError} = useGetPost(markerId);
   
@@ -114,7 +118,7 @@ function MarkerModal({markerId, isVisible, hide}: MarkerModalProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   optionBackground: {
     flex: 1,
     justifyContent: 'flex-end',

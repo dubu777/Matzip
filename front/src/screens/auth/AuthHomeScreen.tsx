@@ -15,10 +15,14 @@ import {authNavigations} from '@/constants/navigations';
 import CustomButton from '@/components/common/CustomButton';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { colors } from '@/constants';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 
 type AuthHomeScreenProps = StackScreenProps<AuthStackParamList>;
 
 function AuthHomeScreen({navigation}: AuthHomeScreenProps) {
+  const {theme} = useThemeStore();
+  const styles = styling(theme);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.imgContainer}>
@@ -50,7 +54,7 @@ function AuthHomeScreen({navigation}: AuthHomeScreenProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   container: {
     flex: 1,
     margin: 30,

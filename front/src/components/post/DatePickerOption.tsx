@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import {colors} from '@/constants';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 
 interface DatePickerOptionProps {
   isVisible: boolean;
@@ -23,6 +25,8 @@ function DatePickerOption({
   onChangeDate,
   onConfirmDate,
 }: DatePickerOptionProps) {
+  const {theme} = useThemeStore();
+  const styles = styling(theme);
   return (
     <Modal visible={isVisible} transparent={true} animationType={'slide'}>
       <SafeAreaView style={[styles.optionBackground, styles.dimmed]}>
@@ -46,8 +50,7 @@ function DatePickerOption({
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
+const styling = (theme: ThemeMode) => StyleSheet.create({
   pickerContainer: {
     alignItems: 'center',
   },
