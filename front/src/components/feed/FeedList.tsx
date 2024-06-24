@@ -23,6 +23,7 @@ function FeedList() {
       fetchNextPage();
     }
   }
+  
   return (
     <FlatList
       data={posts?.pages.flat()}
