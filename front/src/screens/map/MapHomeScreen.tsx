@@ -16,7 +16,7 @@ import MapView, {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useUserLocation from '@/hooks/useUserLocation';
 import usePermission from '@/hooks/usePermission';
-import Ioniccons from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import mapStyle from '@/style/mapStyle';
 import {useGetMarkers} from '@/hooks/queries/useGetMarkers';
@@ -28,10 +28,12 @@ import useMoveMapView from '@/hooks/useMoveMapView';
 import Toast from 'react-native-toast-message';
 import useLocationStore from '@/store/useLocationStore';
 import useThemeStorage from '@/hooks/useThemeStorage';
-import { ThemeMode } from '@/types';
+import {ThemeMode} from '@/types';
 import getMapStyle from '@/style/mapStyle';
 import useLegendStorage from '@/hooks/useLegendStorage';
 import MapLegend from '@/components/map/MapLegend';
+import MarkerFilterOption from '@/components/map/MarkerFilterOption';
+import useMarkerFilter from '@/hooks/useMarkerFilter';
 
 console.log(Config.GOOGLE_API_KEY, 'config');
 console.log(Config.TEST, 'config test');
@@ -53,9 +55,15 @@ function MapHomeScreen() {
   const navigation = useNavigation<Navigation>();
   const {selectLocation, setSelectLocation} = useLocationStore();
   const {userLocation, isUserLocationError} = useUserLocation();
-  const {data: markers = []} = useGetMarkers();
   const [markerId, setMarkerId] = useState<number | null>(null);
   const markerModal = useModal();
+  const filterOption = useModal();
+  const markerFilter = useMarkerFilter();
+  // react query의 select 옵션을 이용해서
+  // markerfilter 커스텀 훅의 transformFilteredMarker 함수로 필터링하기
+  const {data: markers = []} = useGetMarkers({
+    select: markerFilter.transformFilteredMarker,
+  });
   const {mapRef, moveMapView, handleChangeDelta} = useMoveMapView();
   usePermission('LOCATION');
 
@@ -100,8 +108,8 @@ function MapHomeScreen() {
   };
 
   const handlePressSearch = () => {
-    navigation.navigate(mapNavigations.SEARCH_LOCATION)
-  }
+    navigation.navigate(mapNavigations.SEARCH_LOCATION);
+  };
   return (
     <>
       <MapView
@@ -136,17 +144,28 @@ function MapHomeScreen() {
       <Pressable
         style={[styles.drawerButton, {top: inset.top || 20}]}
         onPress={() => navigation.openDrawer()}>
-        <Ioniccons name="menu" color={colors[theme].WHITE} size={25} />
+        <Ionicons name="menu" color={colors[theme].WHITE} size={25} />
       </Pressable>
       <View style={styles.buttonList}>
         <Pressable style={styles.mapButton} onPress={handlePressAddPost}>
           <MaterialIcons name="add" color={colors[theme].WHITE} size={25} />
         </Pressable>
         <Pressable style={styles.mapButton} onPress={handlePressSearch}>
-          <Ioniccons name="search" color={colors[theme].WHITE} size={25} />
+          <Ionicons name="search" color={colors[theme].WHITE} size={25} />
+        </Pressable>
+        <Pressable style={styles.mapButton} onPress={filterOption.show}>
+          <Ionicons
+            name={'options-outline'}
+            color={colors[theme].WHITE}
+            size={25}
+          />
         </Pressable>
         <Pressable style={styles.mapButton} onPress={handlePressUserLocation}>
-          <MaterialIcons name="my-location" color={colors[theme].WHITE} size={25} />
+          <MaterialIcons
+            name="my-location"
+            color={colors[theme].WHITE}
+            size={25}
+          />
         </Pressable>
       </View>
       <MarkerModal
@@ -154,46 +173,51 @@ function MapHomeScreen() {
         isVisible={markerModal.isVisible}
         hide={markerModal.hide}
       />
+      <MarkerFilterOption
+        isVisible={filterOption.isVisible}
+        hideOption={filterOption.hide}
+      />
       {legend.isVisible && <MapLegend />}
     </>
   );
 }
 
-const styling = (theme: ThemeMode) => StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  drawerButton: {
-    position: 'absolute',
-    left: 0,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    backgroundColor: colors[theme].PINK_700,
-    borderTopRightRadius: 50,
-    borderBottomRightRadius: 50,
-    shadowColor: colors[theme].BLACK,
-    shadowOffset: {width: 1, height: 1},
-    shadowOpacity: 0.5,
-    elevation: 4,
-  },
-  buttonList: {
-    position: 'absolute',
-    bottom: 30,
-    right: 15,
-  },
-  mapButton: {
-    backgroundColor: colors[theme].PINK_700,
-    marginVertical: 5,
-    height: 48,
-    width: 48,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 30,
-    shadowColor: colors[theme].BLACK,
-    shadowOffset: {width: 1, height: 2},
-    shadowOpacity: 0.5,
-    elevation: 2,
-  },
-});
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    drawerButton: {
+      position: 'absolute',
+      left: 0,
+      paddingVertical: 10,
+      paddingHorizontal: 12,
+      backgroundColor: colors[theme].PINK_700,
+      borderTopRightRadius: 50,
+      borderBottomRightRadius: 50,
+      shadowColor: colors[theme].BLACK,
+      shadowOffset: {width: 1, height: 1},
+      shadowOpacity: 0.5,
+      elevation: 4,
+    },
+    buttonList: {
+      position: 'absolute',
+      bottom: 30,
+      right: 15,
+    },
+    mapButton: {
+      backgroundColor: colors[theme].PINK_700,
+      marginVertical: 5,
+      height: 48,
+      width: 48,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 30,
+      shadowColor: colors[theme].BLACK,
+      shadowOffset: {width: 1, height: 2},
+      shadowOpacity: 0.5,
+      elevation: 2,
+    },
+  });
 
 export default MapHomeScreen;
