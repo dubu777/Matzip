@@ -73,7 +73,7 @@ function useKakaoLogin(mutationOptions?: UseMutationCustomOptions) {
 // 그래서 그것과 비슷하게 만들어보자.
 // useQuery가 반환하는 값 중에 isSuccess, isError 상태가 있다. useEffect를 같이 사용해서 구현해보자
 function useGetRefreshToken() {
-  const {data, isSuccess, isError} = useQuery({
+  const {data, isSuccess, isError, isPending} = useQuery({
     queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
     queryFn: getAccessToken,
     staleTime: numbers.ACCESS_TOKEN_REFRESH_TIME,
@@ -96,7 +96,7 @@ function useGetRefreshToken() {
     }
   }, [isError]);
 
-  return {isSuccess, isError};
+  return {isSuccess, isError, isPending};
 }
 
 type ResponseSelectProfile = {categories: Category} & Profile;
@@ -185,6 +185,7 @@ function useAuth() {
     onSuccess: () => logoutMutation.mutate(null),
   });
   const categoryMutation = useMutateCategory();
+  const isLoginLoading = refreshTokenQuery.isPending
   return {
     signupMutation,
     refreshTokenQuery,
@@ -196,6 +197,7 @@ function useAuth() {
     profileMutation,
     deleteAccountMutation,
     categoryMutation,
+    isLoginLoading,
   };
 }
 
